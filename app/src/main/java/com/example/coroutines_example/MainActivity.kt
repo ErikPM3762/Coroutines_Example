@@ -3,13 +3,12 @@ package com.example.coroutines_example
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.*
 
 class MainActivity : AppCompatActivity() {
     private val TAG = "ActividadPrincipal"
+
     @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,22 +16,21 @@ class MainActivity : AppCompatActivity() {
 
         Log.d(TAG, "Funcion Main iniciada")
 
-        GlobalScope.launch {
-            val respuesta  = getInternetInfo()
-            Log.d(TAG, respuesta)
+        Ejectutar.setOnClickListener {
+            GlobalScope.launch (Dispatchers.Main){
+                Log.d(TAG, "Corrutina #1 Iniciada")
+            //    Thread.sleep(5000) Con este codigo no permite pasar a la corrutina numero dos
+                // ya que esta esperando a terminar el proceso.
+                delay(5000)
+                Log.d(TAG, "Corrutina #1 Finalizada")
+            }
+
+            GlobalScope.launch (Dispatchers.Main){
+                Log.d(TAG, "Corrutina #2")
+            }
+
         }
 
-      /*  GlobalScope.launch {
-            Log.d(TAG, "Corriendo corrutinas en el subproceso: ${Thread.currentThread().name} ")
-            delay(1000) //Esta es una funcion suspendible que indica el tiempo de espera
-            Log.d(TAG, "Mundo! ")
-        }
-        Log.d(TAG, "Corriendo codigo en el subproceso: ${Thread.currentThread().name} ")
-        Log.d(TAG, "Hola")*/
     }
 
-    suspend fun getInternetInfo() :String {
-        delay(2000)
-        return "Respuesta desde internet"
-    }
 }
