@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    //Codigo para poder acceder al XML y a sus componentes
+    id 'kotlin-android-extensions'
 }
 
 android {
