@@ -1,8 +1,10 @@
 package com.example.coroutines_example
-
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.lifecycle.lifecycleScope
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -15,24 +17,21 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        Log.d(TAG, "Funcion Main iniciada")
+       Ejectutar.setOnClickListener {
+           lifecycleScope.launch {
+               while (true) {
+                   delay(1000)
+                   Log.d(TAG, "Corriendo Corrutina")
+               }
+           }
+           GlobalScope.launch {
+               delay(5000)
+               Intent(this@MainActivity, MainActivity2:: class.java).also {
+                   startActivity(it)
+                   finish()
+               }
 
-        GlobalScope.launch {
-            val respuesta  = getInternetInfo()
-            Log.d(TAG, respuesta)
-        }
-
-      /*  GlobalScope.launch {
-            Log.d(TAG, "Corriendo corrutinas en el subproceso: ${Thread.currentThread().name} ")
-            delay(1000) //Esta es una funcion suspendible que indica el tiempo de espera
-            Log.d(TAG, "Mundo! ")
-        }
-        Log.d(TAG, "Corriendo codigo en el subproceso: ${Thread.currentThread().name} ")
-        Log.d(TAG, "Hola")*/
-    }
-
-    suspend fun getInternetInfo() :String {
-        delay(2000)
-        return "Respuesta desde internet"
+           }
+       }
     }
 }
